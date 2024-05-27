@@ -1,0 +1,73 @@
+# Don't touch this file otherwise your device may stop working.
+# Use override.yaml to modify required settings.
+# You can find a working configuration in /usr/share/kvmd/configs.default/kvmd.
+
+#override: !include [override.d, override.yaml]
+
+logging: !include logging.yaml
+
+kvmd:
+    auth:
+        internal:
+            file: /etc/kvmd/empty_file
+
+    info:
+        meta: /etc/kvmd/meta.yaml
+        fan:
+            unix: /run/kvmd/fan.sock
+
+    hid:
+        type: otg
+
+    atx:
+        type: gpio
+
+    msd:
+        type: otg
+        #        remount_cmd: /nix/store/vi7s2nwdb5lwfkxnlhp4ia0407k0qrkp-coreutils-9.5/bin/true
+
+    streamer:
+        h264_bitrate:
+            default: 5000
+        cmd:
+            - "/nix/store/zb9kbhwlr52shdh9kb4fa28xw93x1dbk-ustreamer-6.4/bin/ustreamer"
+            - "--device=/dev/kvmd-video"
+            - "--persistent"
+            - "--dv-timings"
+            - "--format=uyvy"
+            - "--buffers=6"
+            - "--encoder=m2m-image"
+            - "--workers=3"
+            - "--quality={quality}"
+            - "--desired-fps={desired_fps}"
+            - "--drop-same-frames=30"
+            - "--unix={unix}"
+            - "--unix-rm"
+            - "--unix-mode=0660"
+            - "--exit-on-parent-death"
+            - "--process-name-prefix={process_name_prefix}"
+            - "--notify-parent"
+            - "--no-log-colors"
+            - "--jpeg-sink=kvmd::ustreamer::jpeg"
+            - "--jpeg-sink-mode=0660"
+            - "--h264-sink=kvmd::ustreamer::h264"
+            - "--h264-sink-mode=0660"
+            - "--h264-bitrate={h264_bitrate}"
+            - "--h264-gop={h264_gop}"
+
+    gpio:
+        scheme:
+            __v3_usb_breaker__:
+                pin: 5
+                mode: output
+                initial: true
+                pulse: false
+
+
+vnc:
+    memsink:
+        jpeg:
+            sink: "kvmd::ustreamer::jpeg"
+        h264:
+            sink: "kvmd::ustreamer::h264"
+

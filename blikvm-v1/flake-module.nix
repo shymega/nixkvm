@@ -1,0 +1,43 @@
+{ self, inputs, config, ... }:
+{
+  perSystem = { pkgs, system, ... }: {
+    _module.args.pkgs = import inputs.nixpkgs {
+      inherit system;
+    };
+  };
+  flake = rec {
+    images = {
+      pi = self.nixosConfigurations.pi.config.system.build.diskoImages;
+      #pi = (self.nixosConfigurations.pi.extendModules {
+      #  modules = [
+      #    "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+      #    {
+      #      disabledModules = [
+      #        "profiles/base.nix"
+      #        "profiles/all-hardware.nix"
+      #      ];
+      #    }
+      #  ];
+      #}).config.system.build.sdImage;
+    };
+    packages.x86_64-linux.pi-image = images.pi;
+    packages.aarch64-linux.pi-image = images.pi;
+    nixosConfigurations = {
+      pi = inputs.nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [
+          { nixpkgs.overlays = [ self.overlays.default ]; }
+          inputs.disko.nixosModules.default
+          inputs.nixos-hardware.nixosModules.raspberry-pi-4
+          "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix"
+          ./configuration.nix
+          ./base.nix
+          ./disko.nix
+          self.nixosModules.services-kvmd-otg
+          self.nixosModules.services-kvmd
+        ];
+      };
+    };
+  };
+}
+
