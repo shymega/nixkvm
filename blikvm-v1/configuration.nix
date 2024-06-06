@@ -93,8 +93,13 @@
   boot.kernelModules = [
     "usb_f_hid"
     "usb_f_mass_storage"
+    "bcm2835-v4l2"
+    "dwc2"
   ];
 
+  services.logind.extraConfig = ''
+    RuntimeDirectorySize=50%
+  '';
 
   systemd.tmpfiles.rules = [
     "d /run/kvmd 0777 - - - - -"
@@ -118,6 +123,22 @@
   services.udev.extraRules = ''
     SUBSYSTEM=="gpio", KERNEL=="gpiochip*", ACTION=="add", GROUP="gpio",MODE="0660"
     KERNEL=="vchiq", GROUP="video", MODE="0660", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/vchiq"
+
+    # Taken from https://github.com/pikvm/kvmd/blob/01fff2c7a9404c963800b2df43debb816ad89874/configs/os/udev/v3-hdmi-rpi4.rules#L2
+    # https://unix.stackexchange.com/questions/66901/how-to-bind-usb-device-under-a-static-name
+    # https://wiki.archlinux.org/index.php/Udev#Setting_static_device_names
+    KERNEL=="video[0-9]*", SUBSYSTEM=="video4linux", KERNELS=="fe801000.csi|fe801000.csi1", ATTR{name}=="unicam-image", GROUP="kvmd", SYMLINK+="kvmd-video", TAG+="systemd"
+    KERNEL=="hidg0", GROUP="kvmd", SYMLINK+="kvmd-hid-keyboard"
+    KERNEL=="hidg1", GROUP="kvmd", SYMLINK+="kvmd-hid-mouse"
+    KERNEL=="hidg2", GROUP="kvmd", SYMLINK+="kvmd-hid-mouse-alt"
   '';
 
-}
+    hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+#    hardware.raspberry-pi."4".tc358743.enable = true;
+#    hardware.raspberry-pi."4".dwc2 = {
+#      enable = true;
+#      dr_mode = "host";
+#    };
+#    hardware.raspberry-pi."4".xhci.enable = true;
+#    hardware.deviceTree.filter = "bcm2711-rpi-cm4.dtb";
+    hardware.deviceTree.filter = "bcm2711-rpi-4-b.dtb"; }

@@ -53,7 +53,6 @@ in
     fi
   '';
   disko = {
-    memSize = 16384;
     extraPostVM = ''
       ${pkgs.zstd}/bin/zstd --compress $out/*raw
       rm $out/*raw

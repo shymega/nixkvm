@@ -30,7 +30,7 @@ kvmd:
         h264_bitrate:
             default: 5000
         cmd:
-            - "/nix/store/zb9kbhwlr52shdh9kb4fa28xw93x1dbk-ustreamer-6.4/bin/ustreamer"
+            - "/nix/store/wz4cbjh3yr5g3aq31y1jm6mdmyrkn6rj-ustreamer-6.12/bin/ustreamer"
             - "--device=/dev/kvmd-video"
             - "--persistent"
             - "--dv-timings"

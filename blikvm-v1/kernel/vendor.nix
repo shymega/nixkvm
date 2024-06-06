@@ -1,6 +1,7 @@
 { lib, pkgs, config, ... }:
 {
-  boot.kernelPackages = pkgs.linuxPackages_testing.extend (lib.const (super: {
+#  boot.kernelPackages = pkgs.linuxPackages_latest.extend (lib.const (super: {
+  boot.kernelPackages = pkgs.linuxPackages_rpi4.extend (lib.const (super: {
     kernel = super.kernel.overrideDerivation (drv: {
       nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgs.hexdump ];
     });
@@ -48,4 +49,8 @@
       arch = "armv8-a";
     };
   };
+  nixpkgs.overlays = [(final: super: {
+    # Workaround for modules expected by NixOS not being built                                                                                                                            
+    makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
+  })];
 }
