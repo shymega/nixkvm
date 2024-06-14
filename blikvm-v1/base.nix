@@ -9,7 +9,7 @@
       grub.enable = false;
     };
   };
-  hardware.deviceTree.name = "broadcom/bcm2711-rpi-4-b.dtb";
+  hardware.deviceTree.name = "broadcom/bcm2711-rpi-cm4.dtb";
   boot.loader.systemd-boot.extraInstallCommands = ''
     set -euo pipefail
     ${pkgs.coreutils}/bin/mkdir -p ${config.boot.loader.efi.efiSysMountPoint}/dtbs

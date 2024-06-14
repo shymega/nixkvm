@@ -1,0 +1,5 @@
+{ symlinkJoin, janus-gateway }:
+symlinkJoin {
+  name = "janus-gateway-with-ustreamer"
+  paths = [ janus-gateway ustreamer ];
+}

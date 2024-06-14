@@ -1,8 +1,8 @@
 {
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
-#    nixpkgs.url = "github:matthewcroughan/nixpkgs/mc/pi-kernel-6.9";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:matthewcroughan/nixpkgs/mc/pi-kernel-6.9";
+#    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     disko.url = "github:nix-community/disko";
   };
@@ -23,7 +23,9 @@
           inherit system;
         };
         legacyPackages = {
-          kvmd = pkgs.callPackage ./kvmd {};
+          kvmd = pkgs.callPackage ./packages/kvmd {};
+          ustreamer = pkgs.callPackage ./packages/ustreamer.nix {};
+          janus-gateway-with-ustreamer = pkgs.callPackage ./packages/janus-gateway-with-ustreamer.nix {};
         }; 
       };
       flake = {

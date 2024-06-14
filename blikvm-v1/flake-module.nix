@@ -1,10 +1,10 @@
 { self, inputs, config, ... }:
 {
-  perSystem = { pkgs, system, ... }: {
-    _module.args.pkgs = import inputs.nixpkgs {
-      inherit system;
-    };
-  };
+#  perSystem = { pkgs, system, ... }: {
+#    _module.args.pkgs = import inputs.nixpkgs {
+#      inherit system;
+#    };
+#  };
   flake = rec {
     images = {
       pi = self.nixosConfigurations.pi.config.system.build.diskoImages;
@@ -33,6 +33,8 @@
           ./configuration.nix
           ./base.nix
           ./disko.nix
+          self.nixosModules.services-kvmd-janus
+          self.nixosModules.services-kvmd-edid-loader
           self.nixosModules.services-kvmd-otg
           self.nixosModules.services-kvmd
         ];

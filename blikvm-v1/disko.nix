@@ -16,7 +16,9 @@ let
     # Enable host mode on the 2711 built-in XHCI USB controller.
     # This line should be removed if the legacy DWC2 controller is required
     # (e.g. for USB device mode) or if USB support is not required.
-    otg_mode=1
+
+    # this thing makes gadget mode fail on vendor, not on mainline, sigh
+    #otg_mode=1
 
     [all]
     # Boot in 64-bit mode.

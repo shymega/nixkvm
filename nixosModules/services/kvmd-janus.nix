@@ -5,8 +5,9 @@
     after = [ "network.target" "network-online.target" "nss-lookup.target" "kvmd.service" ];
 
     serviceConfig = {
-      User = "kvmd-janus";
-      Group = "kvmd-janus";
+      #User = "kvmd-janus";
+      #Group = "kvmd-janus";
+      DynamicUser = true;
       Type = "simple";
       Restart = "always";
       RestartSec = 3;

@@ -17,6 +17,8 @@ kvmd:
             unix: /run/kvmd/fan.sock
 
     hid:
+        mouse:
+              absolute: false
         type: otg
 
     atx:
@@ -35,8 +37,8 @@ kvmd:
             - "--persistent"
             - "--dv-timings"
             - "--format=uyvy"
-            - "--buffers=6"
             - "--encoder=m2m-image"
+            - "--buffers=6"
             - "--workers=3"
             - "--quality={quality}"
             - "--desired-fps={desired_fps}"

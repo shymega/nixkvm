@@ -44,6 +44,7 @@
     vim
     git
     waypipe
+    mpv
   ];
   services.openssh.enable = true;
   networking.hostName = "blikvm-v1";
@@ -94,6 +95,16 @@
     "usb_f_hid"
     "usb_f_mass_storage"
     "bcm2835-v4l2"
+    "bcm2835_unicam"
+
+    # not in mainline
+    # fffffucckkkk
+    "bcm2835-codec"
+    "bcm2835-isp"
+    "libcomposite"
+    ##############
+
+    "i2c-dev"
     "dwc2"
   ];
 
@@ -105,10 +116,13 @@
     "d /run/kvmd 0777 - - - - -"
   ];
 
+  sound.enable = true;
 
-  environment.etc."kvmd/main.yaml".source = ../kvmd/main.yaml;
-  environment.etc."kvmd/logging.yaml".source = ../kvmd/logging.yaml;
-  environment.etc."kvmd/meta.yaml".source = ../kvmd/meta.yaml;
+  # TOOD, provide these as part of the kvmd package output
+  environment.etc."kvmd/main.yaml".source = ../packages/kvmd/main.yaml;
+  environment.etc."kvmd/logging.yaml".source = ../packages/kvmd/logging.yaml;
+  environment.etc."kvmd/meta.yaml".source = ../packages/kvmd/meta.yaml;
+  environment.etc."kvmd/janus".source = "${pkgs.kvmd}/share/janus";
   environment.etc."kvmd/empty_file".source = builtins.toFile "empty" "default:$2y$05$a8WXzJVW84T8XbeE71nuoebxia7goYntlIK76oatye4eNEG2ylriu";
   environment.etc."kvmd/totp.secret".source = builtins.toFile "empty" "";
 
@@ -134,11 +148,21 @@
   '';
 
     hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-#    hardware.raspberry-pi."4".tc358743.enable = true;
-#    hardware.raspberry-pi."4".dwc2 = {
-#      enable = true;
-#      dr_mode = "host";
-#    };
+    hardware.raspberry-pi."4".fkms-3d.enable = true;
+    hardware.raspberry-pi."4".tc358743.enable = true;
+    hardware.raspberry-pi."4".dwc2 = {
+      enable = true;
+#      dr_mode = "peripheral";
+    };
 #    hardware.raspberry-pi."4".xhci.enable = true;
-#    hardware.deviceTree.filter = "bcm2711-rpi-cm4.dtb";
-    hardware.deviceTree.filter = "bcm2711-rpi-4-b.dtb"; }
+    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-cm4.dtb";
+#    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4-b.dtb";
+
+# mainline only
+#    hardware.deviceTree.overlays = [
+#      {
+#        name = "tc358743-overlay";
+#        dtsFile = ./tc358743-overlay.dts;
+#      }
+#    ];
+}

@@ -164,7 +164,8 @@ python3.pkgs.buildPythonApplication rec {
         --replace '/etc/kvmd/vncpasswd' '${builtins.toFile "dummy.txt" ""}' \
         --replace '/usr/bin/janus' '${janus-gateway}/bin/janus' \
         --replace '/bin/mount' '/run/wrappers/bin/mount' \
-        --replace '/usr/share/tessdata' '${tesseract}/share'
+        --replace '/usr/share/tessdata' '${tesseract}/share' \
+        --replace '/usr/lib/ustreamer/janus' '${ustreamer}/lib/ustreamer/janus'
     done
 
 #    exit 1

@@ -1,7 +1,6 @@
 { lib, pkgs, config, ... }:
 {
-#  boot.kernelPackages = pkgs.linuxPackages_latest.extend (lib.const (super: {
-  boot.kernelPackages = pkgs.linuxPackages_rpi4.extend (lib.const (super: {
+  boot.kernelPackages = pkgs.linuxPackages_testing.extend (lib.const (super: {
     kernel = super.kernel.overrideDerivation (drv: {
       nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgs.hexdump ];
     });
@@ -32,6 +31,8 @@
         SERIAL_8250_EXTENDED y
         SERIAL_8250_SHARE_IRQ y
 
+        CLK_RASPBERRYPI y
+
         # Cavium ThunderX stuff.
         PCI_HOST_THUNDER_ECAM y
 
@@ -49,8 +50,4 @@
       arch = "armv8-a";
     };
   };
-  nixpkgs.overlays = [(final: super: {
-    # Workaround for modules expected by NixOS not being built                                                                                                                            
-    makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
-  })];
 }
