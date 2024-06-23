@@ -16,10 +16,21 @@
           max_fails = "0";
         };
       };
+      janus-ws.servers = {
+        "unix:/run/kvmd/janus-ws.sock" = {
+          fail_timeout = "0s";
+          max_fails = "0";
+        };
+      };
     };
-    virtualHosts."blikvm-v1.local" = {
+    virtualHosts."localhost" = {
       #addSSL = true;
       #enableACME = true;
+      default = true;
+      listen = [{
+        addr = "127.0.0.1";
+        port = 6969;
+      }];
       extraConfig = ''
         absolute_redirect off;
         
@@ -152,11 +163,29 @@
         	include ${pkgs.kvmd}/share/nginx/loc-proxy.conf;
         	auth_request off;
         }
+
+        location /janus/ws {
+        	rewrite ^/janus/ws$ / break;
+        	rewrite ^/janus/ws\?(.*)$ /?$1 break;
+        	proxy_pass http://janus-ws;
+        	include ${pkgs.kvmd}/share/nginx/loc-proxy.conf;
+        	include ${pkgs.kvmd}/share/nginx/loc-websocket.conf;
+        }
+        
+        location = /share/js/kvm/janus.js {
+        	alias ${pkgs.janus-gateway.doc}/share/janus/javascript/janus.js;
+        	include ${pkgs.kvmd}/share/nginx/loc-nocache.conf;
+        }
+        
+        location = /share/js/kvm/adapter.js {
+        	alias ${pkgs.janus-gateway.doc}/share/janus/javascript/adapter.js;
+        	include ${pkgs.kvmd}/share/nginx/loc-nocache.conf;
+        }
       '';
     };
   };
 
-  users.users.nginx.extraGroups = [ "kvmd" ];
+  users.users.nginx.extraGroups = [ "kvmd" "kvmd-janus" ];
 
   users.users.kvmd = {
     isSystemUser = true;

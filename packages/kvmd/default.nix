@@ -175,6 +175,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     mkdir -p $out/share $out/lib/systemd/system
+    cp ${janus-gateway.doc}/share/janus/javascript/janus.js web/share/js/kvm/janus.js
     cp -r {hid,web,extras,contrib/keymaps,configs/*} $out/share
     cp configs/os/services/*.service $out/lib/systemd/system
   '';

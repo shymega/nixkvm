@@ -25,6 +25,7 @@
     nixosConfigurations = {
       pi = inputs.nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           { nixpkgs.overlays = [ self.overlays.default ]; }
           inputs.disko.nixosModules.default
@@ -33,6 +34,7 @@
           ./configuration.nix
           ./base.nix
           ./disko.nix
+          self.nixosModules.services-kvmd-janus-static
           self.nixosModules.services-kvmd-janus
           self.nixosModules.services-kvmd-edid-loader
           self.nixosModules.services-kvmd-otg

@@ -4,9 +4,9 @@
     description = "PiKVM - Janus WebRTC Gateway (Static Config)";
     after = [ "network.target" "network-online.target" "nss-lookup.target" "kvmd.service" ];
     serviceConfig = {
-#      User = "kvmd-janus";
-#      Group = "kvmd-janus";
-      DynamicUser = true;
+      User = "kvmd-janus";
+      Group = "kvmd-janus";
+#      DynamicUser = true;
       Type = "simple";
       Restart = "always";
       RestartSec = 3;
@@ -14,7 +14,7 @@
       LimitNOFILE = 65536;
       UMask = "0117";
 
-      ExecStart = "${pkgs.janus-gateway}/bin/janus --disable-colors --plugins-folder=/usr/lib/ustreamer/janus --configs-folder=/etc/kvmd/janus";
+      ExecStart = "${pkgs.janus-gateway}/bin/janus --disable-colors --plugins-folder=${pkgs.ustreamer}/lib/ustreamer/janus --configs-folder=/etc/kvmd/janus";
       TimeoutStopSec = 10;
       KillMode = "mixed";
     };

@@ -1,12 +1,20 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 {
   imports = [
     ./kernel
+    ./traefik.nix
+    ./yggdrasil.nix
   ];
 #  services.ttyd.enable = true;
+  
+  networking.firewall.allowedUDPPortRanges = [
+    { from = 20000; to = 40000; } # https://docs.pikvm.org/webrtc/?h=webrtc#custom-janus-config for webrtc
+  ];
   networking.firewall.allowedTCPPorts = [
 #    7681
     80
+    443
+    9001
   ];
   nix.settings = {
     experimental-features = lib.mkDefault "nix-command flakes";
@@ -45,6 +53,7 @@
     git
     waypipe
     mpv
+    inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
   ];
   services.openssh.enable = true;
   networking.hostName = "blikvm-v1";
@@ -157,6 +166,7 @@
 #    hardware.raspberry-pi."4".xhci.enable = true;
     hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-cm4.dtb";
 #    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4-b.dtb";
+
 
 # mainline only
 #    hardware.deviceTree.overlays = [
