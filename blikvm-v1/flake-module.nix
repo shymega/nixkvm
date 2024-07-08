@@ -20,7 +20,11 @@
       #  ];
       #}).config.system.build.sdImage;
     };
-    packages.x86_64-linux.pi-image = images.pi;
+    packages.x86_64-linux.pi-image = (self.nixosConfigurations.pi.extendModules {
+      modules = [
+        { disko.imageBuilderQemu = (builtins.getFlake "github:nixos/nixpkgs/65c851cd7523c669b8fb25236b1c48283a2f43ec").legacyPackages.x86_64-linux.qemu + "/bin/qemu-system-aarch64 -M virt -cpu cortex-a57"; }
+      ];
+    }).config.system.build.diskoImages;
     packages.aarch64-linux.pi-image = images.pi;
     nixosConfigurations = {
       pi = inputs.nixpkgs.lib.nixosSystem {

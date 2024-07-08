@@ -6,7 +6,7 @@
     ./yggdrasil.nix
   ];
 #  services.ttyd.enable = true;
-  
+
   networking.firewall.allowedUDPPortRanges = [
     { from = 20000; to = 40000; } # https://docs.pikvm.org/webrtc/?h=webrtc#custom-janus-config for webrtc
   ];
@@ -53,7 +53,6 @@
     git
     waypipe
     mpv
-    inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
   ];
   services.openssh.enable = true;
   networking.hostName = "blikvm-v1";
@@ -68,21 +67,22 @@
     };
   };
 
-  fileSystems."/var/lib/kvmd/msd" = {
-    device = "/var/lib/kvmd/msd-loopback.img";
-    fsType = "ext4";
-    options = [
-      "nodev"
-      "nosuid"
-      "noexec"
-# Mounting a loopback ro for the first time sets it permanently to ro
-#      "rw"
-      "errors=remount-ro"
-      "data=journal"
-      "X-kvmd.otgmsd-root=/var/lib/kvmd/msd"
-      "X-kvmd.otgmsd-user=kvmd"
-    ];
-  };
+  # TODO: find a way to initialise this and make it not required for stage-2
+#  fileSystems."/var/lib/kvmd/msd" = {
+#    device = "/var/lib/kvmd/msd-loopback.img";
+#    fsType = "ext4";
+#    options = [
+#      "nodev"
+#      "nosuid"
+#      "noexec"
+## Mounting a loopback ro for the first time sets it permanently to ro
+##      "rw"
+#      "errors=remount-ro"
+#      "data=journal"
+#      "X-kvmd.otgmsd-root=/var/lib/kvmd/msd"
+#      "X-kvmd.otgmsd-user=kvmd"
+#    ];
+#  };
 
 #  fileSystems."/var/lib/kvmd/msd-bindmount" = {
 #    device = "/var/lib/kvmd/msd";

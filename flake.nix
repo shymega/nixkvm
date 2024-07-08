@@ -2,7 +2,6 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:matthewcroughan/nixpkgs/mc/pi-kernel-6.9";
-    firefox.url = "github:colemickens/flake-firefox-nightly-fork/colemickens/aarch64-support";
     adapter = {
       url = "github:webrtcHacks/adapter/v9.0.1";
       flake = false;
@@ -13,7 +12,7 @@
     };
 #    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    disko.url = "github:nix-community/disko";
+    disko.url = "github:matthewcroughan/disko/mc/make-builder-kernel-configurable";
   };
 
   outputs = inputs@{ flake-parts, ... }:
