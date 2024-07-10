@@ -1,7 +1,7 @@
 {
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:matthewcroughan/nixpkgs/mc/pi-kernel-6.9";
+    nixpkgs.url = "github:nixos/nixpkgs/fae12c5929ec2d53fb599e4146f83f741f8eb571";
     adapter = {
       url = "github:webrtcHacks/adapter/v9.0.1";
       flake = false;

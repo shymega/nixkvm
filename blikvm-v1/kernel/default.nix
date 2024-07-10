@@ -1,8 +1,26 @@
 { lib, pkgs, config, ... }:
+let
+#  rpi4 = pkgs.linuxKernel.packagesFor
+#    (pkgs.callPackage ./linux-rpi.nix {
+#      kernelPatches = with ((pkgs.callPackage (pkgs.path + "/pkgs/os-specific/linux/kernel/patches.nix") {})); [
+#        bridge_stp_helper
+#        request_key_helper
+#      ];
+#      rpiVersion = 4;
+#    });
+  rpi4 =
+    (pkgs.callPackage (./linux-rpi.nix) {
+      kernelPatches = with ((pkgs.callPackage (pkgs.path + "/pkgs/os-specific/linux/kernel/patches.nix") {})); [
+        bridge_stp_helper
+        request_key_helper
+      ];
+      rpiVersion = 4;
+    });
+in
 {
 #  boot.kernelPackages = pkgs.linuxPackages_latest.extend (lib.const (super: {
   boot.kernelPackages = pkgs.linuxPackages_rpi4.extend (lib.const (super: {
-    kernel = super.kernel.overrideDerivation (drv: {
+    kernel = rpi4.overrideDerivation (drv: {
       nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgs.hexdump ];
     });
   }));
