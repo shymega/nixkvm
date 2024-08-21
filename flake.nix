@@ -114,8 +114,7 @@
         };
       };
       flake = {
-        nixosModules = import ./nixosModules { lib = inputs.nixpkgs.lib; };
-
+        nixosModules = import ./nixosModules { inherit (inputs.nixpkgs) lib; };
       };
     };
 }
