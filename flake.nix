@@ -31,7 +31,7 @@
 
       ];
       systems = [ "x86_64-linux" "aarch64-linux" ];
-      perSystem = { config, self', inputs', pkgs, system, ... }: {
+      perSystem = { config, pkgs, system, ... }: {
         treefmt = {
           package = pkgs.treefmt;
           projectRootFile = "flake.nix";
