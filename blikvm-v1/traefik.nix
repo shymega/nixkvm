@@ -9,7 +9,7 @@
       };
       http = {
         services = {
-          pikvm.loadBalancer.servers = [ { url = "http://127.0.0.1:6969"; } ];
+          pikvm.loadBalancer.servers = [{ url = "http://127.0.0.1:6969"; }];
         };
         routers = {
           pikvm-insecure = {
@@ -22,7 +22,7 @@
             rule = "HostRegexp(`{any:.+}`) || ClientIP(`0.0.0.0/0`) || ClientIP(`::/0`)";
             entryPoints = [ "websecure" ];
             service = "pikvm";
-            tls = {};
+            tls = { };
           };
         };
       };

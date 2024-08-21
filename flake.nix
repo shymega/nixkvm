@@ -32,35 +32,35 @@
       ];
       systems = [ "x86_64-linux" "aarch64-linux" ];
       perSystem = { config, self', inputs', pkgs, system, ... }: {
-      treefmt = {
-  package = pkgs.treefmt;
-  projectRootFile = "flake.nix";
+        treefmt = {
+          package = pkgs.treefmt;
+          projectRootFile = "flake.nix";
 
-  settings = {
-    global.excludes = [
-      "*.age"
-      "*.md"
-      "*.gpg"
-      "*.bin"
-    ];
-    shellcheck.includes = [
-      "*"
-      ".envrc"
-    ];
-  };
-  programs = {
-    deadnix.enable = true;
-    statix.enable = true;
-    nixpkgs-fmt.enable = true;
-    prettier.enable = true;
-    yamlfmt.enable = true;
-    jsonfmt.enable = true;
-    mdformat.enable = true;
-    shellcheck.enable = true;
-    shfmt.enable = true;
-    actionlint.enable = true;
-  };
-};
+          settings = {
+            global.excludes = [
+              "*.age"
+              "*.md"
+              "*.gpg"
+              "*.bin"
+            ];
+            shellcheck.includes = [
+              "*"
+              ".envrc"
+            ];
+          };
+          programs = {
+            deadnix.enable = true;
+            statix.enable = true;
+            nixpkgs-fmt.enable = true;
+            prettier.enable = true;
+            yamlfmt.enable = true;
+            jsonfmt.enable = true;
+            mdformat.enable = true;
+            shellcheck.enable = true;
+            shfmt.enable = true;
+            actionlint.enable = true;
+          };
+        };
         pre-commit = {
           check.enable = true;
           settings = {

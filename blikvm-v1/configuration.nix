@@ -5,13 +5,13 @@
     ./traefik.nix
     ./yggdrasil.nix
   ];
-#  services.ttyd.enable = true;
+  #  services.ttyd.enable = true;
 
   networking.firewall.allowedUDPPortRanges = [
     { from = 20000; to = 40000; } # https://docs.pikvm.org/webrtc/?h=webrtc#custom-janus-config for webrtc
   ];
   networking.firewall.allowedTCPPorts = [
-#    7681
+    #    7681
     80
     443
     9001
@@ -68,37 +68,37 @@
   };
 
   # TODO: find a way to initialise this and make it not required for stage-2
-#  fileSystems."/var/lib/kvmd/msd" = {
-#    device = "/var/lib/kvmd/msd-loopback.img";
-#    fsType = "ext4";
-#    options = [
-#      "nodev"
-#      "nosuid"
-#      "noexec"
-## Mounting a loopback ro for the first time sets it permanently to ro
-##      "rw"
-#      "errors=remount-ro"
-#      "data=journal"
-#      "X-kvmd.otgmsd-root=/var/lib/kvmd/msd"
-#      "X-kvmd.otgmsd-user=kvmd"
-#    ];
-#  };
+  #  fileSystems."/var/lib/kvmd/msd" = {
+  #    device = "/var/lib/kvmd/msd-loopback.img";
+  #    fsType = "ext4";
+  #    options = [
+  #      "nodev"
+  #      "nosuid"
+  #      "noexec"
+  ## Mounting a loopback ro for the first time sets it permanently to ro
+  ##      "rw"
+  #      "errors=remount-ro"
+  #      "data=journal"
+  #      "X-kvmd.otgmsd-root=/var/lib/kvmd/msd"
+  #      "X-kvmd.otgmsd-user=kvmd"
+  #    ];
+  #  };
 
-#  fileSystems."/var/lib/kvmd/msd-bindmount" = {
-#    device = "/var/lib/kvmd/msd";
-#    fsType = "bind";
-##options = [ "nodev" "nosuid" "noexec" "ro" "errors=remount-ro" "data=journal" "X-kvmd.otgmsd-root=/var/lib/kvmd/msd" "X-kvmd.otgmsd-user=kvmd" ]
-#    options = [
-#      "ro"
-#      "noexec"
-#      "nosuid"
-#      "nodev"
-#      "errors=remount-ro"
-#      "data=journal"
-#      "X-kvmd.otgmsd-root=/var/lib/kvmd/msd"
-#      "X-kvmd.otgmsd-user=kvmd"
-#    ];
-#  };
+  #  fileSystems."/var/lib/kvmd/msd-bindmount" = {
+  #    device = "/var/lib/kvmd/msd";
+  #    fsType = "bind";
+  ##options = [ "nodev" "nosuid" "noexec" "ro" "errors=remount-ro" "data=journal" "X-kvmd.otgmsd-root=/var/lib/kvmd/msd" "X-kvmd.otgmsd-user=kvmd" ]
+  #    options = [
+  #      "ro"
+  #      "noexec"
+  #      "nosuid"
+  #      "nodev"
+  #      "errors=remount-ro"
+  #      "data=journal"
+  #      "X-kvmd.otgmsd-root=/var/lib/kvmd/msd"
+  #      "X-kvmd.otgmsd-user=kvmd"
+  #    ];
+  #  };
 
   boot.kernelModules = [
     "usb_f_hid"
@@ -135,13 +135,13 @@
   environment.etc."kvmd/empty_file".source = builtins.toFile "empty" "default:$2y$05$a8WXzJVW84T8XbeE71nuoebxia7goYntlIK76oatye4eNEG2ylriu";
   environment.etc."kvmd/totp.secret".source = builtins.toFile "empty" "";
 
-  users.groups.kvmd-pst = {};
+  users.groups.kvmd-pst = { };
 
   security.sudo.extraConfig = ''
     kvmd-pst ALL=(ALL) NOPASSWD: ${pkgs.kvmd}/bin/kvmd-helper-pst-remount
   '';
 
-  users.groups.gpio = {};
+  users.groups.gpio = { };
   # Change permissions gpio devices
   services.udev.extraRules = ''
     SUBSYSTEM=="gpio", KERNEL=="gpiochip*", ACTION=="add", GROUP="gpio",MODE="0660"
@@ -156,23 +156,23 @@
     KERNEL=="hidg2", GROUP="kvmd", SYMLINK+="kvmd-hid-mouse-alt"
   '';
 
-    hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-    hardware.raspberry-pi."4".fkms-3d.enable = true;
-    hardware.raspberry-pi."4".tc358743.enable = true;
-    hardware.raspberry-pi."4".dwc2 = {
-      enable = true;
-#      dr_mode = "peripheral";
-    };
-#    hardware.raspberry-pi."4".xhci.enable = true;
-    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-cm4.dtb";
-#    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4-b.dtb";
+  hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+  hardware.raspberry-pi."4".fkms-3d.enable = true;
+  hardware.raspberry-pi."4".tc358743.enable = true;
+  hardware.raspberry-pi."4".dwc2 = {
+    enable = true;
+    #      dr_mode = "peripheral";
+  };
+  #    hardware.raspberry-pi."4".xhci.enable = true;
+  hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-cm4.dtb";
+  #    hardware.deviceTree.filter = lib.mkForce "bcm2711-rpi-4-b.dtb";
 
 
-# mainline only
-#    hardware.deviceTree.overlays = [
-#      {
-#        name = "tc358743-overlay";
-#        dtsFile = ./tc358743-overlay.dts;
-#      }
-#    ];
+  # mainline only
+  #    hardware.deviceTree.overlays = [
+  #      {
+  #        name = "tc358743-overlay";
+  #        dtsFile = ./tc358743-overlay.dts;
+  #      }
+  #    ];
 }

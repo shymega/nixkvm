@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, ... }:
 let
   configTxt = pkgs.writeText "config.txt" ''
     [pi4]
@@ -55,7 +55,7 @@ in
     fi
   '';
   disko = {
-#    imageBuilderQemu = (builtins.getFlake "github:nixos/nixpkgs/65c851cd7523c669b8fb25236b1c48283a2f43ec").legacyPackages.x86_64-linux.qemu + "/bin/qemu-system-aarch64 -M virt -cpu cortex-a57";
+    #    imageBuilderQemu = (builtins.getFlake "github:nixos/nixpkgs/65c851cd7523c669b8fb25236b1c48283a2f43ec").legacyPackages.x86_64-linux.qemu + "/bin/qemu-system-aarch64 -M virt -cpu cortex-a57";
     imageBuilderKernelPackages = (builtins.getFlake "github:nixos/nixpkgs/65c851cd7523c669b8fb25236b1c48283a2f43ec").legacyPackages.aarch64-linux.linuxPackages_latest;
     imageBuilderPkgs = (builtins.getFlake "github:matthewcroughan/nixpkgs/65c851cd7523c669b8fb25236b1c48283a2f43ec").legacyPackages.aarch64-linux;
     extraPostVM = ''

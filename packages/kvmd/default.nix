@@ -6,22 +6,20 @@
 , tesseract
 , makeWrapper
 
-# undeclared runtime deps
+  # undeclared runtime deps
 , libraspberrypi
 , coreutils
-, sudo
 , iproute2
 , iptables
 , systemdMinimal
 , janus-gateway
-, mount
 , stdenv
 }:
 let
   ustreamer-python = python3.pkgs.buildPythonPackage {
     pname = "ustreamer";
-    version = ustreamer.version;
-    src = ustreamer.src;
+    inherit (ustreamer) version;
+    inherit (ustreamer) src;
     prePatch = ''
       cd python
     '';
@@ -65,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     dbus-python
     dbus-next
     pygments
-    (callPackage ./pyghmi.nix {})
+    (callPackage ./pyghmi.nix { })
     pam
     pillow
     xlib
@@ -123,54 +121,54 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   patchPhase = ''
-    runHook prePatch
-    pwd
-    ls -lah
+        runHook prePatch
+        pwd
+        ls -lah
 
-    substituteInPlace kvmd/libc.py --replace-fail 'ctypes.util.find_library("c")' '"${stdenv.cc.libc}/lib/libc.so.6"'
-    substituteInPlace kvmd/keyboard/printer.py --replace-fail 'ctypes.util.find_library("xkbcommon")' '"${libxkbcommon}/lib/libxkbcommon.so"'
-    substituteInPlace kvmd/apps/kvmd/ocr.py --replace-fail 'ctypes.util.find_library("tesseract")' '"${tesseract}/lib/libtesseract.so"'
+        substituteInPlace kvmd/libc.py --replace-fail 'ctypes.util.find_library("c")' '"${stdenv.cc.libc}/lib/libc.so.6"'
+        substituteInPlace kvmd/keyboard/printer.py --replace-fail 'ctypes.util.find_library("xkbcommon")' '"${libxkbcommon}/lib/libxkbcommon.so"'
+        substituteInPlace kvmd/apps/kvmd/ocr.py --replace-fail 'ctypes.util.find_library("tesseract")' '"${tesseract}/lib/libtesseract.so"'
 
-    cd configs/os/services
+        cd configs/os/services
 
-    rm kvmd-certbot*
-    rm kvmd-nginx*
-    rm kvmd-janus-static*
+        rm kvmd-certbot*
+        rm kvmd-nginx*
+        rm kvmd-janus-static*
 
-    for i in $(find -name '*.service')
-    do
-      substituteInPlace $i \
-        --replace '/usr/bin/kvmd' "$out/bin/kvmd" \
-        --replace '/usr/bin/ustreamer' '${ustreamer}/bin/ustreamer'
-    done
-    cd -
+        for i in $(find -name '*.service')
+        do
+          substituteInPlace $i \
+            --replace '/usr/bin/kvmd' "$out/bin/kvmd" \
+            --replace '/usr/bin/ustreamer' '${ustreamer}/bin/ustreamer'
+        done
+        cd -
     
-    for i in $(find -name '*.py')
-    do
-      substituteInPlace $i \
-        --replace '/usr/share/kvmd' "$out/share" \
-        --replace '/usr/bin/kvmd-' "$out/bin/kvmd-" \
-        --replace '/usr/bin/vcgencmd' "${libraspberrypi}/bin/vcgencmd" \
-        --replace '/bin/true' "${coreutils}/bin/true" \
-        --replace '/usr/bin/sudo' "/run/wrappers/bin/sudo" \
-        --replace '/usr/bin/kvmd-helper-pst-remount' "$out/bin/kvmd-helper-pst-remount" \
-        --replace '/usr/bin/ip' "${iproute2}/bin/ip" \
-        --replace '/usr/sbin/iptables' "${iptables}/bin/iptables" \
-        --replace '/usr/bin/systemd-run' "${systemdMinimal}/bin/systemd-run" \
-        --replace '/usr/bin/systemctl' "${systemdMinimal}/bin/systemctl" \
-        --replace '/etc/kvmd/ipmipasswd' '${builtins.toFile "dummy.txt" ""}' \
-        --replace '/etc/kvmd/vnc/ssl/server.crt' '${builtins.toFile "dummy.txt" ""}' \
-        --replace '/etc/kvmd/vnc/ssl/server.key' '${builtins.toFile "dummy.txt" ""}' \
-        --replace '/etc/kvmd/vncpasswd' '${builtins.toFile "dummy.txt" ""}' \
-        --replace '/usr/bin/janus' '${janus-gateway}/bin/janus' \
-        --replace '/bin/mount' '/run/wrappers/bin/mount' \
-        --replace '/usr/share/tessdata' '${tesseract}/share' \
-        --replace '/usr/lib/ustreamer/janus' '${ustreamer}/lib/ustreamer/janus'
-    done
+        for i in $(find -name '*.py')
+        do
+          substituteInPlace $i \
+            --replace '/usr/share/kvmd' "$out/share" \
+            --replace '/usr/bin/kvmd-' "$out/bin/kvmd-" \
+            --replace '/usr/bin/vcgencmd' "${libraspberrypi}/bin/vcgencmd" \
+            --replace '/bin/true' "${coreutils}/bin/true" \
+            --replace '/usr/bin/sudo' "/run/wrappers/bin/sudo" \
+            --replace '/usr/bin/kvmd-helper-pst-remount' "$out/bin/kvmd-helper-pst-remount" \
+            --replace '/usr/bin/ip' "${iproute2}/bin/ip" \
+            --replace '/usr/sbin/iptables' "${iptables}/bin/iptables" \
+            --replace '/usr/bin/systemd-run' "${systemdMinimal}/bin/systemd-run" \
+            --replace '/usr/bin/systemctl' "${systemdMinimal}/bin/systemctl" \
+            --replace '/etc/kvmd/ipmipasswd' '${builtins.toFile "dummy.txt" ""}' \
+            --replace '/etc/kvmd/vnc/ssl/server.crt' '${builtins.toFile "dummy.txt" ""}' \
+            --replace '/etc/kvmd/vnc/ssl/server.key' '${builtins.toFile "dummy.txt" ""}' \
+            --replace '/etc/kvmd/vncpasswd' '${builtins.toFile "dummy.txt" ""}' \
+            --replace '/usr/bin/janus' '${janus-gateway}/bin/janus' \
+            --replace '/bin/mount' '/run/wrappers/bin/mount' \
+            --replace '/usr/share/tessdata' '${tesseract}/share' \
+            --replace '/usr/lib/ustreamer/janus' '${ustreamer}/lib/ustreamer/janus'
+        done
 
-#    exit 1
+    #    exit 1
      
-    runHook postPatch
+        runHook postPatch
   '';
 
   postFixup = ''

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   users.users.nginx.extraGroups = [ "kvmd" ];
 
@@ -7,11 +7,11 @@
     group = "kvmd";
     extraGroups = [
       "kvmd"
-      "gpio"  # for /dev/gpiochip*
+      "gpio" # for /dev/gpiochip*
       "video" # for /dev/cec*
     ];
   };
-  users.groups.kvmd-janus = {};
+  users.groups.kvmd-janus = { };
   systemd.services.kvmd-janus = {
     description = "PiKVM - Janus WebRTC Gateway";
     after = [ "network.target" "network-online.target" "nss-lookup.target" "kvmd.service" ];

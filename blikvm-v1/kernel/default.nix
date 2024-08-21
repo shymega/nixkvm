@@ -1,27 +1,27 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, ... }:
 let
-#  rpi4 = pkgs.linuxKernel.packagesFor
-#    (pkgs.callPackage ./linux-rpi.nix {
-#      kernelPatches = with ((pkgs.callPackage (pkgs.path + "/pkgs/os-specific/linux/kernel/patches.nix") {})); [
-#        bridge_stp_helper
-#        request_key_helper
-#      ];
-#      rpiVersion = 4;
-#    });
+  #  rpi4 = pkgs.linuxKernel.packagesFor
+  #    (pkgs.callPackage ./linux-rpi.nix {
+  #      kernelPatches = with ((pkgs.callPackage (pkgs.path + "/pkgs/os-specific/linux/kernel/patches.nix") {})); [
+  #        bridge_stp_helper
+  #        request_key_helper
+  #      ];
+  #      rpiVersion = 4;
+  #    });
   rpi4 =
-    (pkgs.callPackage (./linux-rpi.nix) {
-      kernelPatches = with ((pkgs.callPackage (pkgs.path + "/pkgs/os-specific/linux/kernel/patches.nix") {})); [
+    pkgs.callPackage (./linux-rpi.nix) {
+      kernelPatches = with (pkgs.callPackage (pkgs.path + "/pkgs/os-specific/linux/kernel/patches.nix") { }); [
         bridge_stp_helper
         request_key_helper
       ];
       rpiVersion = 4;
-    });
+    };
 in
 {
-#  boot.kernelPackages = pkgs.linuxPackages_latest.extend (lib.const (super: {
-  boot.kernelPackages = pkgs.linuxPackages_rpi4.extend (lib.const (super: {
+  #  boot.kernelPackages = pkgs.linuxPackages_latest.extend (lib.const (super: {
+  boot.kernelPackages = pkgs.linuxPackages_rpi4.extend (lib.const (_super: {
     kernel = rpi4.overrideDerivation (drv: {
-      nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgs.hexdump ];
+      nativeBuildInputs = (drv.nativeBuildInputs or [ ]) ++ [ pkgs.hexdump ];
     });
   }));
   boot.kernelPatches = [
@@ -67,8 +67,10 @@ in
       arch = "armv8-a";
     };
   };
-  nixpkgs.overlays = [(final: super: {
-    # Workaround for modules expected by NixOS not being built                                                                                                                            
-    makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
-  })];
+  nixpkgs.overlays = [
+    (_final: super: {
+      # Workaround for modules expected by NixOS not being built                                                                                                                            
+      makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
+    })
+  ];
 }

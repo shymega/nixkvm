@@ -4,6 +4,5 @@
 # will be displayed in the web interface.
 
 server:
-    host: localhost.localdomain
-
+  host: localhost.localdomain
 kvm: {}

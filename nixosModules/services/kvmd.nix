@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
 
   services.nginx = {
@@ -192,11 +192,11 @@
     group = "kvmd";
     extraGroups = [
       "kvmd"
-      "gpio"  # for /dev/gpiochip*
+      "gpio" # for /dev/gpiochip*
       "video" # for /dev/cec*
     ];
   };
-  users.groups.kvmd = {};
+  users.groups.kvmd = { };
 
   security.sudo.extraConfig = ''
     kvmd ALL=(ALL) NOPASSWD: ${pkgs.kvmd}/bin/kvmd-helper-otgmsd-remount

@@ -6,7 +6,7 @@
     serviceConfig = {
       User = "kvmd-janus";
       Group = "kvmd-janus";
-#      DynamicUser = true;
+      #      DynamicUser = true;
       Type = "simple";
       Restart = "always";
       RestartSec = 3;

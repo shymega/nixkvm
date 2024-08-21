@@ -16,7 +16,7 @@
 , withJanus ? true
 }:
 let
-  patchedJanus = runCommand "janus-gateway-ustreamer-patched" {} ''
+  patchedJanus = runCommand "janus-gateway-ustreamer-patched" { } ''
     cp -r --no-preserve=mode ${janus-gateway.dev} $out
     substituteInPlace $out/include/janus/plugins/plugin.h --replace 'refcount.h' '../refcount.h'
   '';

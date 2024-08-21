@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   systemd.services.kvmd-bootconfig = {
     description = "Pi-KVM - Boot configuration";

@@ -1,8 +1,8 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, ... }:
 {
   boot.kernelPackages = pkgs.linuxPackages_testing.extend (lib.const (super: {
     kernel = super.kernel.overrideDerivation (drv: {
-      nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ pkgs.hexdump ];
+      nativeBuildInputs = (drv.nativeBuildInputs or [ ]) ++ [ pkgs.hexdump ];
     });
   }));
   boot.kernelPatches = [
