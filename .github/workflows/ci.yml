@@ -1,0 +1,22 @@
+---
+name: CI Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "*"
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+jobs:
+  ci-nix-tests:
+    uses: ./.github/workflows/ci-nix-tests.yml
+    secrets: inherit
+
+  ci-nix-releaser:
+    uses: ./.github/workflows/ci-nix-releaser.yml
+    needs: [ci-nix-tests]
+    if: startsWith(github.event.ref, 'refs/tags/v')
+    secrets: inherit
