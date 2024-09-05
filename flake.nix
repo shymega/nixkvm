@@ -15,13 +15,13 @@
           "${matthewcroughan}/profiles/avahi.nix"
           "${matthewcroughan}/mixins/common.nix"
           {
-           environment.systemPackages = with nixpkgs.legacyPackages.aarch64-linux.pkgs; [ vim git ];
-          system.stateVersion = "24.05";
-           nix = {
-             package = nixpkgs.legacyPackages.aarch64-linux.nixVersions.latest;
-             extraOptions = ''
-               experimental-features = nix-command flakes
-             '';
+            environment.systemPackages = with nixpkgs.legacyPackages.aarch64-linux.pkgs; [ vim git ];
+            system.stateVersion = "24.05";
+            nix = {
+              package = nixpkgs.legacyPackages.aarch64-linux.nixVersions.latest;
+              extraOptions = ''
+                experimental-features = nix-command flakes
+              '';
             };
             zramSwap = {
               memoryPercent = 90;
@@ -30,11 +30,11 @@
             };
             services = {
               tailscale.enable = true;
-            ttyd = {
-              enable = true;
-              writeable = true;
-            };
-            openssh.enable = true;
+              ttyd = {
+                enable = true;
+                writeable = true;
+              };
+              openssh.enable = true;
             };
             hardware.enableRedistributableFirmware = true;
             networking = {
