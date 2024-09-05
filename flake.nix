@@ -30,7 +30,6 @@
             services = {
               tailscale.enable = true;
             ttyd.enable = true;
-            ttyd.openFirewall = true;
             openssh.enable = true;
             };
             hardware.enableRedistributableFirmware = true;
