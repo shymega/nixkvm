@@ -15,12 +15,12 @@
           "${matthewcroughan}/profiles/avahi.nix"
           "${matthewcroughan}/mixins/common.nix"
           {
-           environment.systemPackages = with nixpkgs.legacyPackages.aarch64-linux.pkgs; [ vim git ];
-           nix = {
-             package = nixpkgs.legacyPackages.aarch64-linux.nixUnstable;
-             extraOptions = ''
-               experimental-features = nix-command flakes
-             '';
+            environment.systemPackages = with nixpkgs.legacyPackages.aarch64-linux.pkgs; [ vim git ];
+            nix = {
+              package = nixpkgs.legacyPackages.aarch64-linux.nixUnstable;
+              extraOptions = ''
+                experimental-features = nix-command flakes
+              '';
             };
             zramSwap = {
               memoryPercent = 90;
