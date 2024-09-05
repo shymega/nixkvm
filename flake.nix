@@ -29,7 +29,10 @@
             };
             services = {
               tailscale.enable = true;
-            ttyd.enable = true;
+            ttyd = {
+              enable = true;
+              writeable = true;
+            };
             openssh.enable = true;
             };
             hardware.enableRedistributableFirmware = true;
