@@ -1,0 +1,42 @@
+---
+name: CI Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  format-flake:
+    name: Nix formatting job
+    permissions:
+      contents: write
+    if: ${{ github.event_name == 'push' }} # Don't run on PRs.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: cachix/install-nix-action@V27
+      - name: Format Nix files # Add support for `nix fmt` in future - as well as checks.
+        run: nix run nixpkgs#nixpkgs-fmt -- .
+      - name: Commit changes to codebase
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.ref_name }}
+          commit_message: "chore(lint): Format Nix files"
+  ci-tests: # Run on PRs *and* push events.
+    name: Nix CI checks 
+    needs: [format-flake]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        with:
+          ref: ${{ github.ref_name }}
+        uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@V27
+      - name: Check Flake formatting
+        run: nix run nixpkgs#nixpkgs-fmt -- --check ./
+      - name: Check Flake with Nix
+        run: nix flake check
+      - name: Check Flake with Statix
+        run: nix run nixpkgs#statix -- check ./
